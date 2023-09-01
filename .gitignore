@@ -1,0 +1,14 @@
+01-eks-cluster/private-key
+**/.terraform
+**/plan.txt
+**/destroy-plan.txt
+**/.terraform.lock.hcl
+tmp
+**.pem
+**.DS_Store
+AssumeRole.md
+commands.sh
+exclude
+k8-goal
+
+
