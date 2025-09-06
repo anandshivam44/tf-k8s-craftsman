@@ -7,18 +7,18 @@ resource "null_resource" "copy_ec2_keys" {
     host     = aws_eip.bastion_eip.public_ip    
     user     = "ec2-user"
     password = ""
-    private_key = file("private-key/innovation_hub_ssh_key")
+    private_key = file("private-key/ec2_ssh_key")
   }  
 
 ## File Provisioner: Copies the terraform-key file to /tmp/terraform-key
   provisioner "file" {
-    source      = "private-key/innovation_hub_ssh_key"
-    destination = "/tmp/innovation_hub_ssh_key"
+    source      = "private-key/ec2_ssh_key"
+    destination = "/tmp/ec2_ssh_key"
   }
 ## Remote Exec Provisioner: Using remote-exec provisioner fix the private key permissions on Bastion Host
   provisioner "remote-exec" {
     inline = [
-      "sudo chmod 400 /tmp/innovation_hub_ssh_key"
+      "sudo chmod 400 /tmp/ec2_ssh_key"
     ]
   }
 ## Local Exec Provisioner:  local-exec provisioner (Creation-Time Provisioner - Triggered during Create Resource)

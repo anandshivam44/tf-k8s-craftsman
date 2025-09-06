@@ -1,5 +1,5 @@
 resource "aws_dynamodb_table" "example_table" {
-  name           = "example-table"
+  name           = "example-table-1"
   billing_mode   = "PAY_PER_REQUEST"
   hash_key       = "LockID"
   read_capacity  = 0

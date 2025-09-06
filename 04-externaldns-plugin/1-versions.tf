@@ -6,7 +6,7 @@ terraform {
       source = "hashicorp/aws"
       #version = "~> 4.12"
       version = "~> 5.0"
-     }
+    }
     helm = {
       source = "hashicorp/helm"
       #version = "2.5.1"
@@ -17,17 +17,17 @@ terraform {
       source = "hashicorp/kubernetes"
       #version = "~> 2.11"
       version = "~> 2.22.0"
-    }      
+    }
   }
   # Adding Backend as S3 for Remote State Storage
   backend "s3" {
-    bucket = "terraform-backend-1691836809"
+    bucket = "terraform-backend-infra-dev20250906162054200000000001"
     key    = "dev/aws-externaldns/terraform.tfstate"
-    region = "us-east-1" 
+    region = "us-east-1"
 
     # For State Locking
-    dynamodb_table = "03-externaldns-install-terraform-manifests"    
-  }     
+    dynamodb_table = "example-table-1"
+  }
 }
 
 # Terraform AWS Provider Block

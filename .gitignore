@@ -10,5 +10,9 @@ AssumeRole.md
 commands.sh
 exclude
 k8-goal
+**.backup
+**.tfstate
+**.tfstate.backup
+00-terraform-backend/terraform.tfstate
 
 
