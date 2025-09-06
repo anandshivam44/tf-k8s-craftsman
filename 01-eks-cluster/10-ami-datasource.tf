@@ -4,7 +4,7 @@ data "aws_ami" "amzlinux2" {
   owners      = ["amazon"]
   filter {
     name   = "name"
-    values = ["al2023-ami-2023.1.*kernel-*-arm64"]
+    values = ["al2023-ami-*-kernel-*-x86_64"]
   }
   filter {
     name   = "root-device-type"
@@ -16,10 +16,7 @@ data "aws_ami" "amzlinux2" {
   }
   filter {
     name   = "architecture"
-    values = ["arm64"]
+    values = ["x86_64"]
   }
-  filter {
-    name   = "description"
-    values = ["Amazon Linux 2023 AMI*"]
-  }
+
 }

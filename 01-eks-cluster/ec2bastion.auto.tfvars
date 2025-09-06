@@ -1,2 +1,2 @@
-instance_type = "t4g.micro"
-instance_keypair = "innovation_hub_ssh_key"
+instance_type = "t3.micro"
+instance_keypair = "ec2_ssh_key"

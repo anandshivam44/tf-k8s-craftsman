@@ -17,28 +17,30 @@ resource "aws_iam_role" "eks_admin_role" {
       },
     ]
   })
-  inline_policy {
-    name = "eks-full-access-policy"
-
-    policy = jsonencode({
-      Version = "2012-10-17"
-      Statement = [
-        {
-          Action   = [
-            "iam:ListRoles",
-            "eks:*",
-            "ssm:GetParameter"
-          ]
-          Effect   = "Allow"
-          Resource = "*"
-        },
-      ]
-    })
-  }    
-
   tags = {
     tag-key = "${local.name}-eks-admin-role"
   }
+}
+
+# Resource: AWS IAM Role Policy
+resource "aws_iam_role_policy" "eks_admin_role_policy" {
+  name = "eks-full-access-policy"
+  role = aws_iam_role.eks_admin_role.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action   = [
+          "iam:ListRoles",
+          "eks:*",
+          "ssm:GetParameter"
+        ]
+        Effect   = "Allow"
+        Resource = "*"
+      },
+    ]
+  })
 }
 
 

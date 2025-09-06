@@ -14,5 +14,6 @@ k8-goal
 **.tfstate
 **.tfstate.backup
 00-terraform-backend/terraform.tfstate
+node-application
 
 
