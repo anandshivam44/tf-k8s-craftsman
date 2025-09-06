@@ -158,7 +158,7 @@ kubectl create secret docker-registry dockerhub-secret \
 
 ![App Screenshot 2](images/Screenshot%202025-09-07%20at%201.00.37%E2%80%AFAM.png)
 
-❌ Packer Image is created but not used in EKS node group. 
+❌ Packer Image is created but not used in EKS node group. This part was extremely time consuming that I had to give up for now to complete the task within a day. 
 
 ## App Security
 
