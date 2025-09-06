@@ -1,4 +1,20 @@
+# Custom AMI and Launch Template Outputs
+output "eks_custom_al2023_x86_64_ami_id" {
+  description = "The ID of the custom EKS AL2023 x86_64 AMI"
+  value       = data.aws_ami.eks_custom_al2023_x86_64.id
+}
+
+output "eks_launch_template_x86_64_id" {
+  description = "The ID of the EKS x86_64 launch template"
+  value       = aws_launch_template.eks_nodes_x86_64.id
+}
+
 # EKS Cluster Outputs
+output "eks_cluster_name" {
+  description = "The name of the EKS cluster"
+  value       = aws_eks_cluster.eks_cluster.name
+}
+
 output "cluster_id" {
   description = "The name/id of the EKS cluster."
   value       = aws_eks_cluster.eks_cluster.id

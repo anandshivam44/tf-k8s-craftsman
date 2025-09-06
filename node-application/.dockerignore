@@ -1,0 +1,26 @@
+# Dependencies
+node_modules
+npm-debug.log*
+yarn-error.log
+
+# Env and secrets
+.env
+.env.*.local
+
+# VCS
+.git
+.gitignore
+
+# Build/test artifacts
+coverage
+logs
+*.log
+tmp
+.DS_Store
+
+# IDE/editor
+.vscode
+.idea
+
+# Misc
+Procfile
