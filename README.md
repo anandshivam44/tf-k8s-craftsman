@@ -1,4 +1,4 @@
-This project had been built on top of [anandshivam44/tf-k8s-craftsman](https://github.com/anandshivam44/tf-k8s-craftsman/tree/2-year-old-backup) and Windsurf was used as an assistant to build this project
+This project had been built on top of [anandshivam44/tf-k8s-craftsman/tree/base](https://github.com/anandshivam44/tf-k8s-craftsman/tree/base) and Windsurf was used as an assistant to build the project especially helm charts
 
 ## Dependencies
 
