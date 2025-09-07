@@ -24,6 +24,7 @@ resource "aws_eks_node_group" "eks_ng_private" {
     for_each = var.use_packer_ami ? [] : [1]
     content {
       ec2_ssh_key = var.ec2_ssh_key_name
+      source_security_group_ids = [module.public_bastion_sg.security_group_id]
     }
   }
 
