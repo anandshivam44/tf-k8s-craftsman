@@ -8,3 +8,14 @@ eks_oidc_root_ca_thumbprint          = "9e99a48a9960b14926bb7f3b02e22da2b0ab7280
 
 # Use AWS-managed AMI for private node group (disable custom Launch Template)
 use_packer_ami = true
+
+# Private node group scaling values
+private_node_desired_size = 1
+private_node_min_size     = 1
+private_node_max_size     = 2
+
+# Public node group scaling values
+public_node_desired_size = 1
+public_node_min_size     = 1
+public_node_max_size     = 2
+

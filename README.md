@@ -76,6 +76,8 @@ DIR=01-eks-cluster && terraform -chdir=$DIR validate
 DIR=01-eks-cluster && terraform -chdir=$DIR plan
 DIR=01-eks-cluster && terraform -chdir=$DIR apply -auto-approve
 ```
+Worker node group creation takes 2-3 minutes. If it is taking longer it means it is unable to join the cluster. Use AWS Systems Manager -> Change Management Tools -> Automation -> Execute Runbook -> AWSSupport-TroubleshootEKSWorkerNode
+[AWSSupport-TroubleshootEKSWorkerNode](https://us-east-1.console.aws.amazon.com/systems-manager/documents/AWSSupport-TroubleshootEKSWorkerNode/description?region=us-east-1)
 
 ### SSH and Test Bastion Host
 

@@ -1,32 +1,44 @@
-/*
 # Create AWS EKS Node Group - Public
 resource "aws_eks_node_group" "eks_ng_public" {
-  cluster_name    = aws_eks_cluster.eks_cluster.name
+  cluster_name = aws_eks_cluster.eks_cluster.name
 
   node_group_name = "${local.name}-eks-ng-public"
   node_role_arn   = aws_iam_role.eks_nodegroup_role.arn
   subnet_ids      = module.vpc.public_subnets
-  version = var.cluster_version #(Optional: Defaults to EKS Cluster Kubernetes version)    
-  
-  ami_type = "AL2_x86_64"  
+
   capacity_type = "ON_DEMAND"
-  disk_size = 20
-  instance_types = ["t3.medium"]
-  
-  
-  remote_access {
-    ec2_ssh_key = "eks-terraform-key"
+
+  dynamic "launch_template" {
+    for_each = var.use_packer_ami ? [1] : []
+    content {
+      id      = aws_launch_template.eks_nodes_x86_64.id
+      version = aws_launch_template.eks_nodes_x86_64.latest_version
+    }
   }
 
+  ami_type       = var.use_packer_ami ? null : var.private_node_ami_type
+  instance_types = var.use_packer_ami ? null : var.private_node_instance_types
+  disk_size      = var.use_packer_ami ? null : var.private_node_disk_size
+
+  dynamic "remote_access" {
+    for_each = var.use_packer_ami ? [] : [1]
+    content {
+      ec2_ssh_key = var.ec2_ssh_key_name
+      source_security_group_ids = [module.public_bastion_sg.security_group_id]
+    }
+  }
+
+
+
   scaling_config {
-    desired_size = 1
-    min_size     = 1    
-    max_size     = 2
+    desired_size = var.public_node_desired_size
+    min_size     = var.public_node_min_size
+    max_size     = var.public_node_max_size
   }
 
   # Desired max percentage of unavailable worker nodes during node group update.
   update_config {
-    max_unavailable = 1    
+    max_unavailable = 1
     #max_unavailable_percentage = 50    # ANY ONE TO USE
   }
 
@@ -36,11 +48,11 @@ resource "aws_eks_node_group" "eks_ng_public" {
     aws_iam_role_policy_attachment.eks-AmazonEKSWorkerNodePolicy,
     aws_iam_role_policy_attachment.eks-AmazonEKS_CNI_Policy,
     aws_iam_role_policy_attachment.eks-AmazonEC2ContainerRegistryReadOnly,
-    kubernetes_config_map_v1.aws_auth 
-  ] 
-
+    aws_iam_role_policy_attachment.eks-AmazonSSMManagedInstanceCore,
+    kubernetes_config_map_v1.aws_auth,
+    aws_key_pair.eks_key
+  ]
   tags = {
     Name = "Public-Node-Group"
   }
 }
-*/

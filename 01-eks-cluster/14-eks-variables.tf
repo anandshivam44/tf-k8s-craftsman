@@ -66,4 +66,42 @@ variable "ec2_ssh_key_name" {
   type        = string
   default     = "ec2_ssh_key"
 }
+ 
+ # Private node group scaling configuration
+ variable "private_node_desired_size" {
+   description = "Desired number of worker nodes in the private node group"
+   type        = number
+   default     = 2
+ }
+ 
+ variable "private_node_min_size" {
+   description = "Minimum number of worker nodes in the private node group"
+   type        = number
+   default     = 2
+ }
+ 
+ variable "private_node_max_size" {
+   description = "Maximum number of worker nodes in the private node group"
+   type        = number
+   default     = 3
+ }
+
+ # Public node group scaling configuration
+ variable "public_node_desired_size" {
+   description = "Desired number of worker nodes in the public node group"
+   type        = number
+   default     = 1
+ }
+ 
+ variable "public_node_min_size" {
+   description = "Minimum number of worker nodes in the public node group"
+   type        = number
+   default     = 1
+ }
+ 
+ variable "public_node_max_size" {
+   description = "Maximum number of worker nodes in the public node group"
+   type        = number
+   default     = 2
+ }
 

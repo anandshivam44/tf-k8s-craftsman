@@ -54,9 +54,15 @@ resource "aws_launch_template" "eks_nodes_x86_64" {
   }
 
   user_data = base64encode(<<-EOF
-#!/bin/bash
-set -o xtrace
-/etc/eks/bootstrap.sh ${aws_eks_cluster.eks_cluster.name}
+---
+apiVersion: node.eks.aws/v1alpha1
+kind: NodeConfig
+spec:
+  cluster:
+    name: ${aws_eks_cluster.eks_cluster.name}
+    apiServerEndpoint: ${aws_eks_cluster.eks_cluster.endpoint}
+    certificateAuthority: ${aws_eks_cluster.eks_cluster.certificate_authority[0].data}
+    cidr: ${var.cluster_service_ipv4_cidr}
 EOF
   )
 
