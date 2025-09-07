@@ -1,0 +1,1 @@
+DIR=01-eks-cluster; { time terraform -chdir="$DIR" apply -auto-approve; } 2>&1 | tee -a terraform.log; say "completed"

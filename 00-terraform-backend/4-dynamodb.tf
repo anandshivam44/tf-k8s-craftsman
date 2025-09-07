@@ -9,5 +9,5 @@ resource "aws_dynamodb_table" "example_table" {
     name = "LockID"
     type = "S"
   }
-  tags=local.common_tags
+  tags = local.common_tags
 }

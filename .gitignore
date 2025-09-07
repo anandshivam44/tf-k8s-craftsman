@@ -14,5 +14,8 @@ k8-goal
 **.tfstate
 **.tfstate.backup
 00-terraform-backend/terraform.tfstate
-
+01-eks-cluster/local-exec-output-files/
+01-eks-cluster/disabled
+**.log
+prompts.txt
 

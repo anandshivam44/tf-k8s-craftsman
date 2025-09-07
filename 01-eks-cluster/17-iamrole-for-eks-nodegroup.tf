@@ -1,3 +1,8 @@
+
+resource "aws_iam_role_policy_attachment" "eks-AmazonSSMManagedInstanceCore" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+  role       = aws_iam_role.eks_nodegroup_role.name
+}
 # IAM Role for EKS Node Group 
 resource "aws_iam_role" "eks_nodegroup_role" {
   name = "${local.name}-eks-nodegroup-role"

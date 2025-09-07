@@ -6,11 +6,25 @@ resource "aws_eks_node_group" "eks_ng_private" {
   node_role_arn   = aws_iam_role.eks_nodegroup_role.arn
   subnet_ids      = module.vpc.private_subnets
 
-  capacity_type  = "ON_DEMAND"
+  capacity_type = "ON_DEMAND"
 
-  launch_template {
-    id      = aws_launch_template.eks_nodes_x86_64.id
-    version = aws_launch_template.eks_nodes_x86_64.latest_version
+  dynamic "launch_template" {
+    for_each = var.use_packer_ami ? [1] : []
+    content {
+      id      = aws_launch_template.eks_nodes_x86_64.id
+      version = aws_launch_template.eks_nodes_x86_64.latest_version
+    }
+  }
+
+  ami_type       = var.use_packer_ami ? null : var.private_node_ami_type
+  instance_types = var.use_packer_ami ? null : var.private_node_instance_types
+  disk_size      = var.use_packer_ami ? null : var.private_node_disk_size
+
+  dynamic "remote_access" {
+    for_each = var.use_packer_ami ? [] : [1]
+    content {
+      ec2_ssh_key = var.ec2_ssh_key_name
+    }
   }
 
 
@@ -33,7 +47,9 @@ resource "aws_eks_node_group" "eks_ng_private" {
     aws_iam_role_policy_attachment.eks-AmazonEKSWorkerNodePolicy,
     aws_iam_role_policy_attachment.eks-AmazonEKS_CNI_Policy,
     aws_iam_role_policy_attachment.eks-AmazonEC2ContainerRegistryReadOnly,
-    kubernetes_config_map_v1.aws_auth
+    aws_iam_role_policy_attachment.eks-AmazonSSMManagedInstanceCore,
+    kubernetes_config_map_v1.aws_auth,
+    aws_key_pair.eks_key
   ]
   tags = {
     Name = "Private-Node-Group"

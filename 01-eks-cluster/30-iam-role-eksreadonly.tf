@@ -31,7 +31,7 @@ resource "aws_iam_role_policy" "eks_readonly_role_policy" {
     Version = "2012-10-17"
     Statement = [
       {
-        Action   = [
+        Action = [
           "iam:ListRoles",
           "ssm:GetParameter",
           "eks:DescribeNodegroup",

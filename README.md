@@ -87,7 +87,7 @@ chmod 400 ./01-eks-cluster/private-key/ec2_ssh_key
 ssh -o StrictHostKeyChecking=no -i ./01-eks-cluster/private-key/ec2_ssh_key ec2-user@"$BASTION_IP"
 ```
 
-### Copy private key to Bastion Host
+### Copy private key to Bastion Host (Optional)
 
 ```bash
 scp -i 01-eks-cluster/private-key/ec2_ssh_key 01-eks-cluster/private-key/ec2_ssh_key ec2-user@$(terraform -chdir=01-eks-cluster output -raw ec2_bastion_public_ip):/home/ec2-user/
@@ -158,7 +158,7 @@ kubectl create secret docker-registry dockerhub-secret \
 
 ![App Screenshot 2](images/Screenshot%202025-09-07%20at%201.00.37%E2%80%AFAM.png)
 
-❌ Packer Image is created but not used in EKS node group. This part was extremely time consuming that I had to give up for now to complete the task within a day. 
+✅ Used Packer Image. With minimal changes.
 
 ## App Security
 
@@ -169,9 +169,11 @@ kubectl create secret docker-registry dockerhub-secret \
 5. The application Helm chart uses dedicated ServiceAccounts
 6. **OIDC Integration for EKS:** An OIDC provider is configured for the cluster to enable IAM Roles for Service Accounts (IRSA). This allows pods to assume IAM roles with fine-grained permissions, eliminating the need for long-lived AWS credentials inside the cluster. Service accounts are annotated with an IAM role ARN, and pods automatically receive temporary, secure credentials from AWS STS.
 7. Hardened Security Group rules for EKS cluster
+8. EC2 access via SSM Session Manager
+9. Hardened Security Groups everywhere
 
 ## Scalability
-1. Multi AZ Subnet for all 3 tier subnets
+1. 2 AZ setup for all 3 tier application x 2 subnets = 6 subnets
 2. Configure the number of public worker nodes in the file: [01-eks-cluster/20-eks-node-group-public.tf](./01-eks-cluster/20-eks-node-group-public.tf) Set min=3, desired=3 and max=10 for hi~gh scalibility
 3. Configure the number of private worker nodes in the file: [01-eks-cluster/20-eks-node-group-private.tf](./01-eks-cluster/20-eks-node-group-private.tf) Set min=3, desired=3 and max=10 for high scalibility
 4. In Helm Set no of Replicas to 3 in the file: [helm/templates/deployment.yaml](./helm/templates/deployment.yaml)
@@ -181,14 +183,14 @@ kubectl create secret docker-registry dockerhub-secret \
 
 ### Cleaning Up
 ```bash
-terraform -chdir=02-loadbalancer-controller-add-on plan -destroy -out destroy-plan.txt
-terraform -chdir=02-loadbalancer-controller-add-on apply destroy-plan.txt
+terraform -chdir=02-loadbalancer-controller-add-on plan -destroy 
+terraform -chdir=02-loadbalancer-controller-add-on destroy -auto-approve
 
-terraform -chdir=01-eks-cluster plan -destroy -out destroy-plan.txt
-terraform -chdir=01-eks-cluster apply destroy-plan.txt
+terraform -chdir=01-eks-cluster plan -destroy 
+terraform -chdir=01-eks-cluster destroy -auto-approve
 
-terraform -chdir=00-terraform-backend plan -destroy -out destroy-plan.txt
-terraform -chdir=00-terraform-backend apply destroy-plan.txt
+terraform -chdir=00-terraform-backend plan -destroy 
+terraform -chdir=00-terraform-backend destroy -auto-approve
 
 # packer cleanup
 ./scripts/delete_amis.sh

@@ -13,7 +13,7 @@ variable "cluster_service_ipv4_cidr" {
 
 variable "cluster_version" {
   description = "Kubernetes minor version to use for the EKS cluster (for example 1.21)"
-  type = string
+  type        = string
   default     = null
 }
 variable "cluster_endpoint_private_access" {
@@ -36,4 +36,34 @@ variable "cluster_endpoint_public_access_cidrs" {
 
 # EKS Node Group Variables
 ## Placeholder space you can create if required
+
+variable "use_packer_ami" {
+  description = "Whether to use the custom Launch Template for the private node group. If false, use AWS-managed AMI with ami_type."
+  type        = bool
+  default     = true
+}
+
+variable "private_node_ami_type" {
+  description = "AMI type to use when not using Launch Template."
+  type        = string
+  default     = "AL2023_x86_64_STANDARD"
+}
+
+variable "private_node_instance_types" {
+  description = "Instance types to use when not using Launch Template."
+  type        = list(string)
+  default     = ["t3.medium"]
+}
+
+variable "private_node_disk_size" {
+  description = "Disk size in GiB for worker nodes when not using Launch Template."
+  type        = number
+  default     = 20
+}
+
+variable "ec2_ssh_key_name" {
+  description = "Name of the EC2 key pair to use for SSH access to worker nodes. Also used to look up public key file under private-key/<name>.pub"
+  type        = string
+  default     = "ec2_ssh_key"
+}
 
