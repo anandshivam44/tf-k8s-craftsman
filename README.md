@@ -168,6 +168,7 @@ kubectl create secret docker-registry dockerhub-secret \
 4. Separate IAM roles for the EKS control plane and node groups.
 5. The application Helm chart uses dedicated ServiceAccounts
 6. **OIDC Integration for EKS:** An OIDC provider is configured for the cluster to enable IAM Roles for Service Accounts (IRSA). This allows pods to assume IAM roles with fine-grained permissions, eliminating the need for long-lived AWS credentials inside the cluster. Service accounts are annotated with an IAM role ARN, and pods automatically receive temporary, secure credentials from AWS STS.
+7. Hardened Security Group rules for EKS cluster
 
 ## Scalability
 1. Multi AZ Subnet for all 3 tier subnets
@@ -195,3 +196,4 @@ terraform -chdir=00-terraform-backend apply destroy-plan.txt
 # Delete the SSH Public Key which was manually uploaded
 aws ec2 delete-key-pair --key-name ec2_ssh_key
 ```
+

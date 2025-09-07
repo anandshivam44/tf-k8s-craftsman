@@ -21,7 +21,7 @@ resource "aws_launch_template" "eks_nodes_x86_64" {
   user_data = base64encode(<<-EOF
 #!/bin/bash
 set -o xtrace
-/etc/eks/bootstrap.sh ${aws_eks_cluster.eks_cluster.name} --kubelet-extra-args '--node-labels=eks.amazonaws.com/compute-type=ec2'
+/etc/eks/bootstrap.sh ${aws_eks_cluster.eks_cluster.name}
 EOF
 )
 
