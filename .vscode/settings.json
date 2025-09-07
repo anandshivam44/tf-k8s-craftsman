@@ -1,0 +1,22 @@
+{
+  "search.exclude": {
+    "**/.git/**": true,
+
+    "**/.terraform/**": true,
+    "**/*.tfstate": true,
+    "**/*.tfstate.*": true,
+    "**/*.tfplan": true,
+    "**/.terragrunt-cache/**": true,
+    "**/crash.log": true,
+
+    "**/packer_cache/**": true,
+    "**/output-*/**": true,
+    "**/.vagrant/**": true,
+
+    "**/*.log": true,
+    "**/logs/**": true,
+    "**/tmp/**": true,
+    "**/.idea/**": true,
+    "**/.DS_Store": true
+  }
+}
