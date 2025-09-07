@@ -1,0 +1,30 @@
+---
+# Dynamic inventory using amazon.aws.aws_ec2
+# Requires: ansible-galaxy collection install -r collections/requirements.yml
+plugin: amazon.aws.aws_ec2
+aws_profile: default
+regions:
+  - us-east-1
+filters:
+  instance-state-name: running
+  "tag:kubernetes.io/cluster/infra-dev-innovation-hub":
+    - owned
+    - shared
+  # Match either key if present on instances
+  "tag:eks:cluster-name": infra-dev-innovation-hub
+  # "tag:aws:eks:cluster-name": infra-dev-innovation-hub
+# Grouping based on tags (adjust as you like)
+keyed_groups:
+  - key: tags.environment
+    prefix: env
+  - key: tags.Name
+    prefix: name
+  - key: tags."eks:cluster-name"
+    prefix: eks_cluster
+  - key: tags."eks:nodegroup-name"
+    prefix: eks_nodegroup
+# Use instance-id for addressing with SSM
+hostnames:
+  - instance-id
+compose:
+  ansible_host: instance_id

@@ -33,3 +33,46 @@ resource "aws_iam_role_policy_attachment" "eks-AmazonEC2ContainerRegistryReadOnl
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
   role       = aws_iam_role.eks_nodegroup_role.name
 }
+
+# Least-privilege S3 access for SSM module staging used by Ansible over SSM
+# Grants list on the bucket and put/get/delete within the ansible-staging/ prefix only
+resource "aws_iam_policy" "eks_nodes_ssm_s3_access" {
+  name        = "${local.name}-eks-ssm-s3-access"
+  description = "Least-privilege S3 access for Ansible SSM staging (ansible-staging/ prefix only)"
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Sid      = "ListBucketForStagingPrefix",
+        Effect   = "Allow",
+        Action   = ["s3:ListBucket"],
+        Resource = "arn:aws:s3:::${var.ansible_staging_bucket_name}",
+        Condition = {
+          StringLike = {
+            "s3:prefix" = [
+              "${var.ansible_staging_prefix}*",
+              "${var.ansible_staging_prefix}"
+            ]
+          }
+        }
+      },
+      {
+        Sid    = "ObjectAccessWithinStagingPrefix",
+        Effect = "Allow",
+        Action = [
+          "s3:GetObject",
+          "s3:PutObject",
+          "s3:AbortMultipartUpload",
+          "s3:DeleteObject"
+        ],
+        Resource = "arn:aws:s3:::${var.ansible_staging_bucket_name}/${var.ansible_staging_prefix}*"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "eks_nodes_ssm_s3_access_attach" {
+  role       = aws_iam_role.eks_nodegroup_role.name
+  policy_arn = aws_iam_policy.eks_nodes_ssm_s3_access.arn
+}

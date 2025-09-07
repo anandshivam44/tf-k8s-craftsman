@@ -1,16 +1,29 @@
 # Get latest AMI ID for EKS-optimized Amazon Linux 2 x86_64
+# Get latest AMI ID for Packer-built Amazon Linux 2023 x86_64 (EKS)
 data "aws_ami" "eks_custom_al2023_x86_64" {
   most_recent = true
-  owners      = ["amazon"]
+  owners      = [data.aws_caller_identity.current.account_id]
 
+  # Match our Packer naming pattern
   filter {
     name   = "name"
-    values = ["amazon-eks-node-1.32-*"]
+    values = ["al2023-eks-x86_64-*"]
   }
 
   filter {
     name   = "architecture"
     values = ["x86_64"]
+  }
+
+  # Ensure we only pick AMIs built by our Packer template and for the target k8s version
+  filter {
+    name   = "tag:BuiltWith"
+    values = ["Packer"]
+  }
+
+  filter {
+    name   = "tag:KubernetesVersion"
+    values = [var.cluster_version]
   }
 
   filter {

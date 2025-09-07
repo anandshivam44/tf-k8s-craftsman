@@ -1,0 +1,16 @@
+# Global Ansible settings for AWS SSM connection
+# Adjust region/profile/bucket as needed.
+# Use the amazon.aws connection plugin
+ansible_connection: amazon.aws.aws_ssm
+ansible_aws_ssm_region: us-east-1
+ansible_aws_ssm_profile: default
+
+# S3 bucket used by the SSM connection plugin for file transfers (copy/template)
+# Using the backend bucket from 00-terraform-backend (us-east-1)
+# Note: we set multiple var names to satisfy either amazon.aws or community.aws plugins
+aws_ssm_bucket_name: terraform-backend-infra-dev20250906162054200000000001
+aws_ssm_bucket_prefix: ansible-staging/
+aws_ssm_s3_bucket: terraform-backend-infra-dev20250906162054200000000001
+aws_ssm_s3_prefix: ansible-staging/
+ansible_aws_ssm_bucket_name: terraform-backend-infra-dev20250906162054200000000001
+ansible_aws_ssm_bucket_prefix: ansible-staging/

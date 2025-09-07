@@ -1,0 +1,33 @@
+---
+- name: Check NTP (chrony/ntp) installation on EKS worker nodes via SSM
+  hosts: all
+  gather_facts: false
+  become: true
+  tasks:
+    - name: Gather package facts
+      ansible.builtin.package_facts:
+        manager: auto
+
+    - name: Define candidate NTP packages
+      ansible.builtin.set_fact:
+        ntp_candidate_packages: ["chrony", "ntp"]
+
+    - name: Determine if chrony/ntp packages are installed
+      ansible.builtin.set_fact:
+        ntp_found_packages: "{{ ntp_candidate_packages | select('in', ansible_facts.packages.keys() | list) | list }}"
+        ntp_installed: "{{ (ntp_candidate_packages | select('in', ansible_facts.packages.keys() | list) | list ) | length > 0 }}"
+
+    - name: Show NTP installation status
+      ansible.builtin.debug:
+        msg: >-
+          NTP installed: {{ ntp_installed }}
+          {{ 'packages: ' ~ (ntp_found_packages | join(', ')) if ntp_installed else '(no chrony/ntp packages found)' }}
+
+    - name: Optional - check chrony service status when present
+      ansible.builtin.service_facts:
+      when: "'chrony' in ntp_found_packages"
+
+    - name: Show chrony service state (if present)
+      ansible.builtin.debug:
+        var: ansible_facts.services["chronyd.service"]
+      when: "'chrony' in ntp_found_packages and 'chronyd.service' in ansible_facts.services"

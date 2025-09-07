@@ -90,7 +90,7 @@ source "amazon-ebs" "eks_al2023_x86_64" {
 }
 
 build {
-  name    = "al2023-eks-x86_64-1-33"
+  name    = "al2023-eks-x86_64-1-32"
   sources = ["source.amazon-ebs.eks_al2023_x86_64"]
 
   # Install and enable Chrony (NTP)

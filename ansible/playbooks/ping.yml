@@ -1,0 +1,7 @@
+---
+- name: Ping EC2 instances over AWS SSM
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Ping via SSM
+      ansible.builtin.ping:

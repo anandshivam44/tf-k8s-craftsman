@@ -90,7 +90,7 @@ ssh -o StrictHostKeyChecking=no -i ./01-eks-cluster/private-key/ec2_ssh_key ec2-
 ### Copy private key to Bastion Host (Optional)
 
 ```bash
-scp -i 01-eks-cluster/private-key/ec2_ssh_key 01-eks-cluster/private-key/ec2_ssh_key ec2-user@$(terraform -chdir=01-eks-cluster output -raw ec2_bastion_public_ip):/home/ec2-user/
+scp -o StrictHostKeyChecking=no -i 01-eks-cluster/private-key/ec2_ssh_key 01-eks-cluster/private-key/ec2_ssh_key ec2-user@$(terraform -chdir=01-eks-cluster output -raw ec2_bastion_public_ip):/home/ec2-user/
 ```
 
 ### Stop Bastion Host (Optional)
@@ -107,9 +107,9 @@ aws eks --region us-east-1 update-kubeconfig --name infra-dev-innovation-hub --a
 ```
 
 ### Use Ansible to check if NTP is installed and running on the worker nodes
-modify ansible/inventory
+more comands in (ansible/README.md)[./ansible/README.md]
 ```bash
-ansible-playbook -i ansible/inventory check_ntp.yml
+ansible-playbook ansible/playbooks/dependency_check.yml
 ```
 
 ### Install LoadBalancer Controller Add-on
@@ -158,7 +158,8 @@ kubectl create secret docker-registry dockerhub-secret \
 
 ![App Screenshot 2](images/Screenshot%202025-09-07%20at%201.00.37%E2%80%AFAM.png)
 
-✅ Used Packer Image. With minimal changes.
+✅ Used Packer Image. With minimal changes. 
+Switch between `use_packer_ami = true` and `use_packer_ami = false` to switch between  self-managed AMI for private node group and quick launch template
 
 ## App Security
 
